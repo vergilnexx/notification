@@ -1,0 +1,13 @@
+{
+  "EmailConfiguration": {
+    "Server": "pop3-19.1gb.ru",
+    "Account": "u325943",
+    "Password": "c60aca560vn"
+  },
+  "Tracked": {
+    "Users": [
+      "ekaterina.ugnovenok@informicus.ru",
+      "volgograd@informicus.ru"
+    ]
+  }
+}
