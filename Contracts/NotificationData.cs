@@ -2,9 +2,9 @@
 
 namespace Contracts
 {
-    public class VacationData
+    public class NotificationData
     {
-        public string From { get; set; }
+        public string Subject { get; set; }
 
         public DateTime Start { get; set; }
 

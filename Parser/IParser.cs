@@ -6,6 +6,6 @@ namespace Parser
 {
     public interface IParser
     {
-        public Task<IReadOnlyCollection<VacationData>> Parse(IReadOnlyCollection<IMessage> messages);
+        public Task<IReadOnlyCollection<NotificationData>> Parse(IReadOnlyCollection<IMessage> messages);
     }
 }

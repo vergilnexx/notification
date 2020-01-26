@@ -6,6 +6,6 @@ namespace Reader
 {
     public interface IReader
     {
-        Task<IReadOnlyCollection<EmailMessage>> Get();
+        Task<IReadOnlyCollection<NotificationData>> Get();
     }
 }

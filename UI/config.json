@@ -1,4 +1,7 @@
 {
+  "FileConfiguration": {
+    "Path": ""
+  },
   "EmailConfiguration": {
     "Server": "pop3-19.1gb.ru",
     "Account": "u325943",

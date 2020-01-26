@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NETCore.MailKit;
-using NETCore.MailKit.Core;
-using NETCore.MailKit.Infrastructure.Internal;
-using Parser;
 using Reader;
+using Reader.Options;
+using Storage;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 
 namespace UI
 {
@@ -23,13 +21,16 @@ namespace UI
                 var serviceCollection = InitializeServiceLocator();
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-
                     var reader = serviceProvider.GetService<IReader>();
-                    var parser = serviceProvider.GetService<IParser>();
+                    var storage = serviceProvider.GetService<IStorage>();
 
-                    var messages = await reader.Get();
-                    var data = await parser.Parse(messages);
-                    
+                    await storage.Load();
+
+                    var data = await reader.Get();
+
+                    await storage.Save(data.ToArray());
+                    await storage.Backup();
+
                     Show(data);
                 }
             }
@@ -54,31 +55,30 @@ namespace UI
                             .Build();
 
             environment.EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            environment.ApplicationName = "Vacation notification";
+            environment.ApplicationName = "Notification";
 
             services.AddSingleton(environment);
             services.AddTransient<IConfiguration>(collection => configuration);
-            services.AddSingleton(configuration.GetSection("EmailConfiguration").Get<MailKitOptions>());
-            services.AddTransient<IMailKitProvider, MailKitProvider>();
-            services.AddTransient<IEmailService, EmailService>();
+            services.AddSingleton(configuration.GetSection("EmailConfiguration").Get<MailOptions>());
+            services.AddSingleton(configuration.GetSection("FileConfiguration").Get<Storage.Options.FileOptions>());
             services.AddTransient<IReader, EmailReader>();
-            services.AddTransient<IParser, EmailParser>();
+            services.AddTransient<IStorage, FileStorage>();
 
             return services;
         }
 
-        private static void Show(IReadOnlyCollection<Contracts.VacationData> data)
+        private static void Show(IReadOnlyCollection<Contracts.NotificationData> data)
         {
             foreach (var item in data)
             {
-                NotifyIcon icon = new NotifyIcon();
+                //NotifyIcon icon = new NotifyIcon();
 
-                icon.Icon = new Icon("./alarm.ico");
-                icon.Visible = true;
-                icon.BalloonTipIcon = ToolTipIcon.Warning;
-                icon.BalloonTipTitle = "Напоминание!";
-                icon.BalloonTipText = $"Отпуск у {item.From} с {item.Start.ToString("dd.MM.yyyy")} по {item.End.ToString("dd.MM.yyyy")}";
-                icon.ShowBalloonTip(2000);
+                //icon.Icon = new Icon("./alarm.ico");
+                //icon.Visible = true;
+                //icon.BalloonTipIcon = ToolTipIcon.Warning;
+                //icon.BalloonTipTitle = "Напоминание!";
+                //icon.BalloonTipText = $"{item.Subject} с {item.Start.ToString("dd.MM.yyyy")} по {item.End.ToString("dd.MM.yyyy")}";
+                //icon.ShowBalloonTip(2000);
             }
         }
     }

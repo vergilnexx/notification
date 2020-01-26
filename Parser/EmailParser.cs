@@ -8,9 +8,9 @@ namespace Parser
 {
     public class EmailParser : IParser
     {
-        public async Task<IReadOnlyCollection<VacationData>> Parse(IReadOnlyCollection<IMessage> messages)
+        public async Task<IReadOnlyCollection<NotificationData>> Parse(IReadOnlyCollection<IMessage> messages)
         {
-            var data = new List<VacationData>();
+            var data = new List<NotificationData>();
 
             foreach (var message in messages)
             {
@@ -21,9 +21,9 @@ namespace Parser
             return data;
         }
 
-        private async Task<VacationData> Parse(IMessage message)
+        private async Task<NotificationData> Parse(IMessage message)
         {
-            var data = new VacationData();
+            var data = new NotificationData();
 
             data.From = message.From;
             
